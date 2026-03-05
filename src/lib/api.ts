@@ -1,0 +1,112 @@
+import { supabase } from './supabase';
+import type { User, ApprovalRequest, ApprovalHistory, RequestItem } from '../types';
+
+export async function login(employee_id: string, password: string): Promise<User> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, employee_id, name, role, email, department, level, title')
+    .eq('employee_id', employee_id)
+    .eq('password', password)
+    .single();
+
+  if (error || !data) throw new Error('Mã nhân viên hoặc mật khẩu không đúng');
+  return data as User;
+}
+
+export async function getRequests(): Promise<ApprovalRequest[]> {
+  const { data, error } = await supabase
+    .from('requests')
+    .select('*, requester:users!requester_id(name)')
+    .order('created_at', { ascending: false });
+
+  if (error) throw new Error('Không thể tải danh sách yêu cầu');
+  return (data || []).map((r: any) => {
+    const { requester, ...rest } = r;
+    return { ...rest, requester_name: requester?.name };
+  });
+}
+
+export async function getRequest(id: number): Promise<ApprovalRequest> {
+  const { data, error } = await supabase
+    .from('requests')
+    .select('*, requester:users!requester_id(name)')
+    .eq('id', id)
+    .single();
+
+  if (error || !data) throw new Error('Không tìm thấy yêu cầu');
+  const { requester, ...rest } = data as any;
+  return { ...rest, requester_name: requester?.name };
+}
+
+export async function getRequestHistory(requestId: number): Promise<ApprovalHistory[]> {
+  const { data, error } = await supabase
+    .from('approvals')
+    .select('*, approver:users!approver_id(name, role)')
+    .eq('request_id', requestId)
+    .order('created_at', { ascending: true });
+
+  if (error) throw new Error('Không thể tải lịch sử phê duyệt');
+  return (data || []).map((a: any) => {
+    const { approver, ...rest } = a;
+    return { ...rest, approver_name: approver?.name, approver_role: approver?.role };
+  });
+}
+
+export async function getRequestItems(requestId: number): Promise<RequestItem[]> {
+  const { data, error } = await supabase
+    .from('request_items')
+    .select('*')
+    .eq('request_id', requestId);
+
+  if (error) throw new Error('Không thể tải danh sách hàng hoá');
+  return (data || []) as RequestItem[];
+}
+
+export async function createRequest(payload: any): Promise<{ id: number }> {
+  const { data, error } = await supabase.rpc('create_request', {
+    p_title: payload.title,
+    p_description: payload.description || null,
+    p_amount: payload.amount,
+    p_type: payload.type,
+    p_requester_id: payload.requester_id,
+    p_request_group: payload.request_group || null,
+    p_deadline_days: payload.deadline_days || null,
+    p_leadtime: payload.leadtime || null,
+    p_po_number: payload.po_number || null,
+    p_budget_plan: payload.budget_plan || null,
+    p_budget_code: payload.budget_code || null,
+    p_notes: payload.notes || null,
+    p_proposal_overview: payload.proposal_overview || null,
+    p_proposal_time: payload.proposal_time || null,
+    p_proposal_location: payload.proposal_location || null,
+    p_proposal_chairperson: payload.proposal_chairperson || null,
+    p_proposal_form: payload.proposal_form || null,
+    p_proposal_target: payload.proposal_target || null,
+    p_proposal_requirements: payload.proposal_requirements || null,
+    p_proposal_method_support: payload.proposal_method_support || null,
+    p_proposal_costs: payload.proposal_costs || null,
+    p_proposal_results: payload.proposal_results || null,
+    p_items: payload.items ? payload.items : null,
+  });
+
+  if (error) throw new Error('Lỗi hệ thống khi tạo yêu cầu: ' + error.message);
+  if ((data as any)?.error) throw new Error((data as any).error);
+  return data as { id: number };
+}
+
+export async function approveRequest(
+  requestId: number,
+  approverId: number,
+  status: 'APPROVED' | 'REJECTED',
+  comment: string
+): Promise<void> {
+  const { data, error } = await supabase.rpc('approve_request', {
+    p_request_id: requestId,
+    p_approver_id: approverId,
+    p_status: status,
+    p_comment: comment,
+  });
+
+  if (error) throw new Error('Lỗi hệ thống khi xử lý phê duyệt: ' + error.message);
+  if ((data as any)?.error) throw new Error((data as any).error);
+}

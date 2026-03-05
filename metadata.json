@@ -1,0 +1,5 @@
+{
+  "name": "ApprovalFlow",
+  "description": "Hệ thống quản lý Purchase Request (PR) và Tờ trình với quy trình phê duyệt đa cấp.",
+  "requestFramePermissions": []
+}
