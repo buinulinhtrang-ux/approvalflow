@@ -1,4 +1,4 @@
-export type UserRole = 'REQUESTER' | 'MANAGER' | 'CFO' | 'COO';
+export type UserRole = 'REQUESTER' | 'MANAGER' | 'CFO' | 'COO' | 'ADMIN';
 
 export interface User {
   id: number;
@@ -9,6 +9,24 @@ export interface User {
   department?: string;
   level?: string;
   title?: string;
+  is_active?: boolean;
+}
+
+export interface SheetEmployee {
+  employee_id: string;
+  name: string;
+  email: string;
+  department: string;
+  role: UserRole;
+  title: string;
+  level: string;
+  is_active: boolean;
+}
+
+export interface SyncResult {
+  new_count: number;
+  updated_count: number;
+  deact_count: number;
 }
 
 export type RequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';

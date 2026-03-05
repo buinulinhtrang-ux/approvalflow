@@ -262,3 +262,105 @@ $$;
 
 INSERT INTO users (employee_id, password, name, role, email, department, level, title) VALUES
 ON CONFLICT (employee_id) DO NOTHING;
+
+-- ============================================================
+-- 6. MIGRATION: Thêm cột is_active + role ADMIN cho sync HR
+-- Chạy 1 lần trong SQL Editor nếu bảng đã tồn tại
+-- ============================================================
+
+-- Thêm cột is_active (nhân viên đang hoạt động hay đã nghỉ)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- Tài khoản ADMIN để quản lý đồng bộ HR
+-- Chú ý: role = 'ADMIN', password = employee_id mặc định
+INSERT INTO users (employee_id, password, name, role, email, department, title, is_active)
+VALUES ('ADMIN', 'ADMIN', 'Quản trị hệ thống', 'ADMIN', 'admin@company.com', 'Hệ thống', 'System Admin', TRUE)
+ON CONFLICT (employee_id) DO NOTHING;
+
+-- ============================================================
+-- 7. RPC: sync_employees
+-- Đồng bộ danh sách nhân viên từ Google Sheets
+-- Nhận vào mảng JSON, trả về số lượng mới/cập nhật/deactivate
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION sync_employees(p_employees JSONB)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  emp             JSONB;
+  existing_user   RECORD;
+  v_new_count     INT := 0;
+  v_updated_count INT := 0;
+  v_deact_count   INT := 0;
+  v_is_active     BOOLEAN;
+  v_changed       BOOLEAN;
+BEGIN
+  FOR emp IN SELECT * FROM jsonb_array_elements(p_employees) LOOP
+    v_is_active := COALESCE((emp->>'is_active')::boolean, true);
+
+    SELECT * INTO existing_user
+    FROM users
+    WHERE employee_id = (emp->>'employee_id');
+
+    IF NOT FOUND THEN
+      -- Nhân viên mới: chỉ tạo nếu đang active
+      IF v_is_active THEN
+        INSERT INTO users (employee_id, password, name, role, email, department, level, title, is_active)
+        VALUES (
+          emp->>'employee_id',
+          emp->>'employee_id',   -- mật khẩu mặc định = employee_id
+          emp->>'name',
+          COALESCE(emp->>'role', 'REQUESTER'),
+          COALESCE(emp->>'email', ''),
+          emp->>'department',
+          emp->>'level',
+          emp->>'title',
+          TRUE
+        );
+        v_new_count := v_new_count + 1;
+      END IF;
+
+    ELSE
+      -- Nhân viên đã tồn tại
+      IF NOT v_is_active AND existing_user.is_active THEN
+        -- Deactivate
+        UPDATE users SET is_active = FALSE WHERE employee_id = (emp->>'employee_id');
+        v_deact_count := v_deact_count + 1;
+
+      ELSIF v_is_active THEN
+        -- Kiểm tra thay đổi thông tin
+        v_changed := (
+          existing_user.name          IS DISTINCT FROM (emp->>'name')                    OR
+          existing_user.role          IS DISTINCT FROM COALESCE(emp->>'role', 'REQUESTER') OR
+          existing_user.email         IS DISTINCT FROM COALESCE(emp->>'email', '')        OR
+          existing_user.department    IS DISTINCT FROM (emp->>'department')               OR
+          existing_user.level         IS DISTINCT FROM (emp->>'level')                   OR
+          existing_user.title         IS DISTINCT FROM (emp->>'title')                   OR
+          existing_user.is_active = FALSE
+        );
+
+        IF v_changed THEN
+          UPDATE users SET
+            name       = emp->>'name',
+            role       = COALESCE(emp->>'role', 'REQUESTER'),
+            email      = COALESCE(emp->>'email', ''),
+            department = emp->>'department',
+            level      = emp->>'level',
+            title      = emp->>'title',
+            is_active  = TRUE
+          WHERE employee_id = (emp->>'employee_id');
+          v_updated_count := v_updated_count + 1;
+        END IF;
+      END IF;
+    END IF;
+  END LOOP;
+
+  RETURN jsonb_build_object(
+    'new_count',     v_new_count,
+    'updated_count', v_updated_count,
+    'deact_count',   v_deact_count
+  );
+END;
+$$;

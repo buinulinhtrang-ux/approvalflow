@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { User, ApprovalRequest, ApprovalHistory, RequestItem } from '../types';
+import type { User, ApprovalRequest, ApprovalHistory, RequestItem, SheetEmployee, SyncResult } from '../types';
 
 export async function login(employee_id: string, password: string): Promise<User> {
   const { data, error } = await supabase
@@ -10,7 +10,128 @@ export async function login(employee_id: string, password: string): Promise<User
     .single();
 
   if (error || !data) throw new Error('Mã nhân viên hoặc mật khẩu không đúng');
-  return data as User;
+  const user = data as any;
+  if (user.is_active === false) throw new Error('Tài khoản đã bị vô hiệu hoá. Vui lòng liên hệ quản trị.');
+  return user as User;
+}
+
+// ── HR Sync ───────────────────────────────────────────────────
+
+/**
+ * Đọc CSV từ Google Sheets (sheet phải được publish to web dưới dạng CSV)
+ * URL format: https://docs.google.com/spreadsheets/d/{ID}/export?format=csv
+ * Cột bắt buộc (theo thứ tự, có header row):
+ *   employee_id, name, email, department, role, title, level, is_active
+ */
+/** Chuyển đổi mọi dạng URL Google Sheet sang URL export CSV */
+function toGoogleSheetCsvUrl(input: string): string {
+  const trimmed = input.trim();
+
+  // Đã là URL CSV export hoặc pub → giữ nguyên
+  if (trimmed.includes('export?format=csv') || trimmed.includes('/pub?output=csv')) {
+    return trimmed;
+  }
+
+  // Trích sheet ID từ URL dạng: /spreadsheets/d/{ID}/...
+  const match = trimmed.match(/\/spreadsheets\/d\/([^/]+)/);
+  if (!match) throw new Error('URL không hợp lệ. Vui lòng dùng URL từ Google Sheets.');
+
+  const sheetId = match[1];
+  // Lấy gid nếu có (ví dụ: #gid=12345 hoặc ?gid=12345)
+  const gidMatch = trimmed.match(/[?&#]gid=(\d+)/);
+  const gid = gidMatch ? gidMatch[1] : '0';
+
+  return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+}
+
+export async function fetchGoogleSheetEmployees(csvUrl: string): Promise<SheetEmployee[]> {
+  let exportUrl: string;
+  try {
+    exportUrl = toGoogleSheetCsvUrl(csvUrl);
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+
+  let res: Response;
+  try {
+    res = await fetch(exportUrl);
+  } catch {
+    throw new Error('Không thể kết nối tới Google Sheets. Kiểm tra kết nối mạng hoặc sheet phải được public.');
+  }
+
+  if (res.status === 401 || res.status === 403 || res.status === 406) {
+    throw new Error(
+      'Google Sheet chưa được công khai. Vào File → Share → Publish to web → chọn sheet → CSV → Publish, rồi dùng URL đó.'
+    );
+  }
+  if (!res.ok) {
+    throw new Error(`Không thể tải Google Sheet (HTTP ${res.status}). Kiểm tra lại URL.`);
+  }
+
+  const raw = await res.text();
+
+  // Kiểm tra nếu nhận về HTML thay vì CSV
+  if (raw.trimStart().startsWith('<!')) {
+    throw new Error(
+      'Google Sheet trả về HTML thay vì CSV. Sheet chưa được publish public, hoặc URL sai định dạng.'
+    );
+  }
+
+  // Xử lý BOM và chuẩn hóa line endings (\r\n → \n)
+  const text = raw.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) throw new Error('Google Sheet trống hoặc không có dữ liệu');
+
+  // Đọc header để map cột linh hoạt (trim, lowercase, bỏ quotes)
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^"|"$/g, '').trim());
+  const idx = (name: string) => headers.indexOf(name);
+
+  const requiredCols = ['employee_id', 'name'];
+  for (const col of requiredCols) {
+    if (idx(col) === -1) throw new Error(`Google Sheet thiếu cột bắt buộc: "${col}"`);
+  }
+
+  const employees: SheetEmployee[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    // Xử lý CSV đơn giản (không handle quoted commas phức tạp)
+    const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+
+    const getCol = (name: string) => (idx(name) >= 0 ? cols[idx(name)] ?? '' : '');
+
+    const empId = getCol('employee_id');
+    if (!empId) continue;
+
+    const isActiveRaw = getCol('is_active').toLowerCase();
+    const is_active = isActiveRaw !== 'false' && isActiveRaw !== '0' && isActiveRaw !== 'không' && isActiveRaw !== 'no';
+
+    employees.push({
+      employee_id: empId,
+      name:        getCol('name'),
+      email:       getCol('email'),
+      department:  getCol('department'),
+      role:        (getCol('role') || 'REQUESTER') as any,
+      title:       getCol('title'),
+      level:       getCol('level'),
+      is_active,
+    });
+  }
+
+  if (employees.length === 0) throw new Error('Không tìm thấy dữ liệu nhân viên hợp lệ trong sheet');
+  return employees;
+}
+
+export async function syncEmployees(employees: SheetEmployee[]): Promise<SyncResult> {
+  const { data, error } = await supabase.rpc('sync_employees', {
+    p_employees: employees as any,
+  });
+
+  if (error) throw new Error('Lỗi đồng bộ: ' + error.message);
+  if ((data as any)?.error) throw new Error((data as any).error);
+  return data as SyncResult;
 }
 
 export async function getRequests(): Promise<ApprovalRequest[]> {

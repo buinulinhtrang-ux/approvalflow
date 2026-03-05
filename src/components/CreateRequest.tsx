@@ -176,8 +176,8 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="bg-white border border-[#141414]/10 rounded-3xl overflow-hidden shadow-2xl">
-        <div className="p-6 border-b border-[#141414]/5 flex items-center justify-between bg-stone-50">
+      <div className="bg-white border border-[#E2E8F4] rounded-2xl overflow-hidden" style={{ boxShadow: '0 4px 20px rgba(14,31,64,.1)' }}>
+        <div className="p-6 border-b border-[#0E1F40]/5 flex items-center justify-between bg-stone-50">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">
               {formData.type === 'PR' ? 'Tạo yêu cầu mua sắm' : 'Tạo tờ trình phê duyệt'}
@@ -198,27 +198,27 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
               type="button"
               onClick={() => setFormData({ ...formData, type: 'PR' })}
               className={`p-6 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${
-                formData.type === 'PR' 
-                  ? 'border-[#141414] bg-stone-50' 
-                  : 'border-stone-100 hover:border-stone-200'
+                formData.type === 'PR'
+                  ? 'border-[#0E1F40] bg-[#F7F9FC]'
+                  : 'border-[#E2E8F4] hover:border-[#8896B0]'
               }`}
             >
               <span className="block text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-2">Form Type 01</span>
               <span className="block font-bold text-xl">Yêu cầu mua sắm (PR)</span>
-              {formData.type === 'PR' && <div className="absolute top-2 right-2 w-2 h-2 bg-[#141414] rounded-full" />}
+              {formData.type === 'PR' && <div className="absolute top-2 right-2 w-2 h-2 bg-[#C8952A] rounded-full" />}
             </button>
             <button
               type="button"
               onClick={() => setFormData({ ...formData, type: 'PROPOSAL' })}
               className={`p-6 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${
-                formData.type === 'PROPOSAL' 
-                  ? 'border-[#141414] bg-stone-50' 
-                  : 'border-stone-100 hover:border-stone-200'
+                formData.type === 'PROPOSAL'
+                  ? 'border-[#0E1F40] bg-[#F7F9FC]'
+                  : 'border-[#E2E8F4] hover:border-[#8896B0]'
               }`}
             >
               <span className="block text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-2">Form Type 02</span>
               <span className="block font-bold text-xl">Tờ trình phê duyệt</span>
-              {formData.type === 'PROPOSAL' && <div className="absolute top-2 right-2 w-2 h-2 bg-[#141414] rounded-full" />}
+              {formData.type === 'PROPOSAL' && <div className="absolute top-2 right-2 w-2 h-2 bg-[#C8952A] rounded-full" />}
             </button>
           </div>
 
@@ -234,7 +234,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Ví dụ: Mua sắm máy tính xách tay cho phòng IT..."
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white font-medium"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white font-medium"
                   />
                 </div>
 
@@ -244,7 +244,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     type="text"
                     value={formData.request_group}
                     onChange={(e) => setFormData({ ...formData, request_group: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white"
                   />
                 </div>
 
@@ -254,7 +254,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     type="number"
                     value={formData.deadline_days}
                     onChange={(e) => setFormData({ ...formData, deadline_days: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white"
                   />
                 </div>
 
@@ -264,7 +264,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     type="text"
                     value={formData.leadtime}
                     onChange={(e) => setFormData({ ...formData, leadtime: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white"
                   />
                 </div>
 
@@ -274,7 +274,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     type="text"
                     value={formData.po_number}
                     onChange={(e) => setFormData({ ...formData, po_number: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white"
                   />
                 </div>
 
@@ -284,7 +284,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     type="text"
                     value={formData.budget_plan}
                     onChange={(e) => setFormData({ ...formData, budget_plan: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white"
                   />
                 </div>
 
@@ -294,7 +294,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     type="text"
                     value={formData.budget_code}
                     onChange={(e) => setFormData({ ...formData, budget_code: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none bg-white"
                   />
                 </div>
               </div>
@@ -309,7 +309,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                   <button
                     type="button"
                     onClick={addItem}
-                    className="px-4 py-2 rounded-full border border-[#141414] text-[#141414] text-xs font-bold hover:bg-[#141414] hover:text-white transition-all flex items-center gap-2"
+                    className="px-4 py-2 rounded-full border border-[#0E1F40] text-[#0E1F40] text-xs font-bold hover:bg-[#0E1F40] hover:text-white transition-all flex items-center gap-2"
                   >
                     <Plus size={14} />
                     Thêm dòng
@@ -342,7 +342,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="text"
                               value={item.item_name}
                               onChange={(e) => handleItemChange(index, 'item_name', e.target.value)}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -350,7 +350,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="text"
                               value={item.specs}
                               onChange={(e) => handleItemChange(index, 'specs', e.target.value)}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -358,7 +358,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="text"
                               value={item.unit}
                               onChange={(e) => handleItemChange(index, 'unit', e.target.value)}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -366,7 +366,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="number"
                               value={item.total_qty}
                               onChange={(e) => handleItemChange(index, 'total_qty', parseFloat(e.target.value))}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm text-right"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm text-right"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -374,7 +374,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="number"
                               value={item.available_qty}
                               onChange={(e) => handleItemChange(index, 'available_qty', parseFloat(e.target.value))}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm text-right"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm text-right"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -382,7 +382,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="number"
                               value={item.purchase_qty}
                               onChange={(e) => handleItemChange(index, 'purchase_qty', parseFloat(e.target.value))}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm text-right bg-stone-50 font-bold"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm text-right bg-stone-50 font-bold"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -390,11 +390,11 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="number"
                               value={item.unit_price}
                               onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm text-right"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm text-right"
                             />
                           </td>
                           <td className="px-2 py-2">
-                            <div className="w-full px-2 py-1.5 text-sm text-right font-bold text-[#141414]">
+                            <div className="w-full px-2 py-1.5 text-sm text-right font-bold text-[#0E1F40]">
                               {item.amount?.toLocaleString()}
                             </div>
                           </td>
@@ -403,7 +403,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                               type="text"
                               value={item.reason}
                               onChange={(e) => handleItemChange(index, 'reason', e.target.value)}
-                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#141414] outline-none transition-all text-sm"
+                              className="w-full px-2 py-1.5 rounded-lg border border-transparent hover:border-stone-200 focus:border-[#0E1F40] outline-none transition-all text-sm"
                             />
                           </td>
                           <td className="px-2 py-2">
@@ -421,7 +421,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     <tfoot>
                       <tr className="bg-stone-50/50 font-bold border-t border-stone-200">
                         <td colSpan={8} className="px-4 py-4 text-right text-sm uppercase tracking-widest text-stone-400">Tổng cộng (VND)</td>
-                        <td className="px-4 py-4 text-right text-lg text-[#141414]">{calculateTotal().toLocaleString()}</td>
+                        <td className="px-4 py-4 text-right text-lg text-[#0E1F40]">{calculateTotal().toLocaleString()}</td>
                         <td colSpan={2}></td>
                       </tr>
                     </tfoot>
@@ -438,7 +438,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Nhập mô tả chi tiết cho tờ trình hoặc yêu cầu..."
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none resize-none bg-stone-50/30"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none resize-none bg-stone-50/30"
                   />
                 </div>
                 <div>
@@ -448,7 +448,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     placeholder="Các ghi chú khác cho người phê duyệt..."
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none resize-none bg-stone-50/30"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none resize-none bg-stone-50/30"
                   />
                 </div>
               </div>
@@ -465,7 +465,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Ví dụ: Tờ trình về việc tổ chức đào tạo nội bộ..."
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none font-bold text-xl"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none font-bold text-xl"
                   />
                 </div>
 
@@ -476,7 +476,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     value={formData.proposal_overview}
                     onChange={(e) => setFormData({ ...formData, proposal_overview: e.target.value })}
                     placeholder="Nhập tổng quan nội dung tờ trình..."
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none resize-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] focus:ring-0 transition-all outline-none resize-none bg-white"
                   />
 
                   <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 border-b border-stone-200 pb-2 mt-4">2. Thông tin chính</h3>
@@ -487,7 +487,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                         type="text"
                         value={formData.proposal_time}
                         onChange={(e) => setFormData({ ...formData, proposal_time: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                       />
                     </div>
                     <div>
@@ -496,7 +496,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                         type="text"
                         value={formData.proposal_location}
                         onChange={(e) => setFormData({ ...formData, proposal_location: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                       />
                     </div>
                     <div>
@@ -505,7 +505,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                         type="text"
                         value={formData.proposal_chairperson}
                         onChange={(e) => setFormData({ ...formData, proposal_chairperson: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                       />
                     </div>
                     <div>
@@ -514,7 +514,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                         type="text"
                         value={formData.proposal_form}
                         onChange={(e) => setFormData({ ...formData, proposal_form: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -523,7 +523,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                         type="text"
                         value={formData.proposal_target}
                         onChange={(e) => setFormData({ ...formData, proposal_target: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                        className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                       />
                     </div>
                   </div>
@@ -533,7 +533,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     rows={3}
                     value={formData.proposal_requirements}
                     onChange={(e) => setFormData({ ...formData, proposal_requirements: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                   />
 
                   <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 border-b border-stone-200 pb-2 mt-4">4. Cách thức tổ chức & Đề nghị hỗ trợ từ các bộ phận:</h3>
@@ -556,7 +556,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                                 type="text"
                                 value={item.dept_name}
                                 onChange={(e) => handleMethodSupportChange(index, 'dept_name', e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#141414] outline-none text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#0E1F40] outline-none text-sm"
                                 placeholder="Tên bộ phận..."
                               />
                             </td>
@@ -565,7 +565,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                                 rows={1}
                                 value={item.content}
                                 onChange={(e) => handleMethodSupportChange(index, 'content', e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#141414] outline-none text-sm resize-none"
+                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#0E1F40] outline-none text-sm resize-none"
                                 placeholder="Nội dung hỗ trợ..."
                               />
                             </td>
@@ -586,7 +586,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                       <button
                         type="button"
                         onClick={addMethodSupport}
-                        className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#141414] hover:opacity-70 transition-all"
+                        className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#0E1F40] hover:opacity-70 transition-all"
                       >
                         <Plus size={14} />
                         Thêm bộ phận
@@ -617,7 +617,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                                 type="text"
                                 value={item.product_name}
                                 onChange={(e) => handleProposalCostChange(index, 'product_name', e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#141414] outline-none text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#0E1F40] outline-none text-sm"
                                 placeholder="Tên sản phẩm..."
                               />
                             </td>
@@ -626,7 +626,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                                 type="text"
                                 value={item.content}
                                 onChange={(e) => handleProposalCostChange(index, 'content', e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#141414] outline-none text-sm"
+                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#0E1F40] outline-none text-sm"
                                 placeholder="Nội dung..."
                               />
                             </td>
@@ -635,7 +635,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                                 type="number"
                                 value={item.quantity}
                                 onChange={(e) => handleProposalCostChange(index, 'quantity', parseFloat(e.target.value))}
-                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#141414] outline-none text-sm text-center"
+                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#0E1F40] outline-none text-sm text-center"
                               />
                             </td>
                             <td className="px-2 py-2">
@@ -643,7 +643,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                                 type="number"
                                 value={item.unit_price}
                                 onChange={(e) => handleProposalCostChange(index, 'unit_price', parseFloat(e.target.value))}
-                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#141414] outline-none text-sm text-right"
+                                className="w-full px-3 py-2 rounded-lg border border-stone-100 focus:border-[#0E1F40] outline-none text-sm text-right"
                               />
                             </td>
                             <td className="px-4 py-2 text-right font-mono text-sm font-bold">
@@ -675,7 +675,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                       <button
                         type="button"
                         onClick={addProposalCost}
-                        className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#141414] hover:opacity-70 transition-all"
+                        className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#0E1F40] hover:opacity-70 transition-all"
                       >
                         <Plus size={14} />
                         Thêm chi phí
@@ -688,7 +688,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
                     rows={3}
                     value={formData.proposal_results}
                     onChange={(e) => setFormData({ ...formData, proposal_results: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] outline-none bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#0E1F40] outline-none bg-white"
                   />
                 </div>
               </div>
@@ -696,7 +696,7 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
           )}
 
           {/* Approval Info */}
-          <div className="bg-stone-900 text-white rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8">
+          <div className="text-white rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8" style={{ background: '#0E1F40' }}>
             <div className="bg-white/10 p-4 rounded-2xl shrink-0">
               <AlertCircle className="text-white" size={32} />
             </div>
@@ -715,13 +715,13 @@ export default function CreateRequest({ onSubmit, onCancel }: CreateRequestProps
               <button
                 type="button"
                 onClick={onCancel}
-                className="flex-1 md:flex-none px-8 py-4 rounded-full border border-white/20 font-bold hover:bg-white/10 transition-all"
+                className="flex-1 md:flex-none px-8 py-4 rounded-xl border border-white/20 font-bold hover:bg-white/10 transition-all"
               >
                 Hủy bỏ
               </button>
               <button
                 type="submit"
-                className="flex-1 md:flex-none px-8 py-4 rounded-full bg-white text-[#141414] font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
+                className="flex-1 md:flex-none px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2" style={{ background: '#C8952A', color: '#0E1F40' }}
               >
                 <Send size={18} />
                 Gửi phê duyệt

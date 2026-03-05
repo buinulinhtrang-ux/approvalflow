@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, LogIn, AlertCircle } from 'lucide-react';
+import { LogIn, AlertCircle } from 'lucide-react';
 import { User } from '../types';
 import * as api from '../lib/api';
 
@@ -29,47 +29,55 @@ export default function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F0] flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#141414] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-            <FileText className="text-white w-8 h-8" />
+    <div style={{ background: '#0E1F40' }} className="h-screen flex items-center justify-center p-4">
+      <div className="w-[360px]">
+        <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 16px 56px rgba(14,31,64,.22)' }} className="p-9">
+          {/* Logo */}
+          <div
+            style={{ background: '#C8952A', borderRadius: 12, width: 48, height: 48, color: '#0E1F40' }}
+            className="flex items-center justify-center font-extrabold text-xl mx-auto mb-4"
+          >
+            AF
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">ApprovalFlow</h1>
-          <p className="text-stone-500 mt-2">Hệ thống phê duyệt PR & Tờ trình</p>
-        </div>
-
-        <div className="bg-white border border-[#141414]/10 rounded-3xl p-8 shadow-xl">
-          <h2 className="text-xl font-bold mb-6">Đăng nhập hệ thống</h2>
+          <h1 style={{ color: '#0E1F40' }} className="text-center text-[18px] font-bold mb-1">ApprovalFlow</h1>
+          <p style={{ color: '#8896B0' }} className="text-center text-xs mb-6">Hệ thống phê duyệt PR &amp; Tờ trình</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-stone-700 mb-1.5">Mã nhân viên</label>
+              <label style={{ color: '#4A5568', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.3px' }} className="block mb-1.5">
+                Mã nhân viên
+              </label>
               <input
                 type="text"
                 required
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="VD: WF01IT"
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none"
+                placeholder="VD: WT12DT"
+                style={{ border: '1px solid #E2E8F4', borderRadius: 7, fontFamily: 'inherit', fontSize: 12.5, color: '#1C2333', background: '#fff', width: '100%', padding: '8px 10px', outline: 'none', transition: '.15s' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#0E1F40'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E2E8F4'}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-stone-700 mb-1.5">Mật khẩu</label>
+              <label style={{ color: '#4A5568', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.3px' }} className="block mb-1.5">
+                Mật khẩu
+              </label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Mặc định là mã nhân viên"
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:border-[#141414] focus:ring-0 transition-all outline-none"
+                style={{ border: '1px solid #E2E8F4', borderRadius: 7, fontFamily: 'inherit', fontSize: 12.5, color: '#1C2333', background: '#fff', width: '100%', padding: '8px 10px', outline: 'none', transition: '.15s' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#0E1F40'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E2E8F4'}
               />
             </div>
 
             {error && (
-              <div className="bg-rose-50 border border-rose-100 text-rose-600 p-3 rounded-xl text-sm flex items-center gap-2">
-                <AlertCircle size={18} />
+              <div style={{ background: '#FEE2E2', color: '#DC2626', borderRadius: 7, padding: '8px 12px', fontSize: 12 }} className="flex items-center gap-2">
+                <AlertCircle size={16} />
                 {error}
               </div>
             )}
@@ -77,26 +85,25 @@ export default function Login({ onLogin }: LoginProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#141414] text-white py-3 rounded-xl font-bold hover:bg-[#141414]/90 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
+              style={{ background: '#0E1F40', color: '#fff', borderRadius: 8, padding: '9px 14px', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? .7 : 1, width: '100%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: '.15s' }}
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <div style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin .6s linear infinite' }} />
               ) : (
                 <>
-                  <LogIn size={18} />
+                  <LogIn size={15} />
                   Đăng nhập
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-stone-100">
-            <p className="text-xs text-stone-400 text-center">
-              Mật khẩu mặc định trùng mã nhân viên
-            </p>
-          </div>
+          <p style={{ color: '#8896B0', fontSize: 11, textAlign: 'center', marginTop: 20 }}>
+            Mật khẩu mặc định trùng mã nhân viên
+          </p>
         </div>
       </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

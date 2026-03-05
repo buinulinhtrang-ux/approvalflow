@@ -1,7 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --color-navy: #0E1F40;
+  --color-navy2: #162845;
+  --color-gold: #C8952A;
+  --color-gold2: #F0C060;
+  --color-paper: #F7F9FC;
+  --color-ink: #1C2333;
+  --color-ink2: #4A5568;
+  --color-ink3: #8896B0;
+  --color-border: #E2E8F4;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
