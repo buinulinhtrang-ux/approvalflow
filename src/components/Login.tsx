@@ -33,14 +33,14 @@ export default function Login({ onLogin }: LoginProps) {
       <div className="w-[360px]">
         <div style={{ background: '#fff', borderRadius: 16, boxShadow: '0 16px 56px rgba(14,31,64,.22)' }} className="p-9">
           {/* Logo */}
-          <div
-            style={{ background: '#C8952A', borderRadius: 12, width: 48, height: 48, color: '#0E1F40' }}
-            className="flex items-center justify-center font-extrabold text-xl mx-auto mb-4"
-          >
-            AF
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
+            <img
+              src={import.meta.env.BASE_URL + 'logo.png'}
+              alt="Wellspring"
+              style={{ height: 56, objectFit: 'contain', marginBottom: 12 }}
+            />
+            <div style={{ width: 32, height: 2, background: '#C8952A', borderRadius: 1 }} />
           </div>
-          <h1 style={{ color: '#0E1F40' }} className="text-center text-[18px] font-bold mb-1">ApprovalFlow</h1>
-          <p style={{ color: '#8896B0' }} className="text-center text-xs mb-6">Hệ thống phê duyệt PR &amp; Tờ trình</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

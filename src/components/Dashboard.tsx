@@ -11,15 +11,21 @@ interface DashboardProps {
   onSelectRequest: (id: number) => void;
 }
 
-const STATUS_CFG = {
-  PENDING:  { label: 'Đang chờ',  dot: '#F59E0B', bg: '#FEF3C7', color: '#B45309' },
-  APPROVED: { label: 'Đã duyệt', dot: '#10B981', bg: '#D1FAE5', color: '#065F46' },
-  REJECTED: { label: 'Đã từ chối', dot: '#EF4444', bg: '#FEE2E2', color: '#991B1B' },
+const STATUS_CFG: Record<string, { label: string; dot: string; bg: string; color: string }> = {
+  DRAFT:     { label: 'Nháp',       dot: '#9CA3AF', bg: '#F3F4F6', color: '#374151' },
+  PENDING:   { label: 'Đang chờ',  dot: '#F59E0B', bg: '#FEF3C7', color: '#B45309' },
+  IN_REVIEW: { label: 'Đang xét',  dot: '#3B82F6', bg: '#DBEAFE', color: '#1D4ED8' },
+  APPROVED:  { label: 'Đã duyệt', dot: '#10B981', bg: '#D1FAE5', color: '#065F46' },
+  REJECTED:  { label: 'Từ chối',  dot: '#EF4444', bg: '#FEE2E2', color: '#991B1B' },
+  CANCELLED: { label: 'Đã hủy',   dot: '#6B7280', bg: '#F3F4F6', color: '#374151' },
 };
 
-const TYPE_CFG = {
-  PR:       { label: 'PR',         color: '#1D4ED8', bg: '#DBEAFE' },
-  PROPOSAL: { label: 'Tờ trình', color: '#6D28D9', bg: '#EDE9FE' },
+const TYPE_CFG: Record<string, { label: string; color: string; bg: string }> = {
+  PR:               { label: 'PR',          color: '#1D4ED8', bg: '#DBEAFE' },
+  PROPOSAL:         { label: 'Tờ trình',    color: '#6D28D9', bg: '#EDE9FE' },
+  ROOM_BOOKING:     { label: 'Phòng họp',   color: '#0891B2', bg: '#CFFAFE' },
+  VEHICLE_BOOKING:  { label: 'Đặt xe',      color: '#059669', bg: '#D1FAE5' },
+  ACCOMMODATION:    { label: 'Phòng CT',    color: '#D97706', bg: '#FEF3C7' },
 };
 
 const formatCurrency = (amount: number) =>
@@ -43,17 +49,17 @@ export default function Dashboard({ requests, filter, search, onSelectRequest }:
   }, [requests, filter, search]);
 
   const total    = requests.length;
-  const pending  = requests.filter(r => r.status === 'PENDING').length;
+  const pending  = requests.filter(r => r.status === 'PENDING' || r.status === 'IN_REVIEW').length;
   const approved = requests.filter(r => r.status === 'APPROVED').length;
   const rejected = requests.filter(r => r.status === 'REJECTED').length;
-  const prCount  = requests.filter(r => r.type === 'PR').length;
+  const cancelled = requests.filter(r => r.status === 'CANCELLED').length;
 
   const STATS = [
-    { label: 'Tổng yêu cầu',  value: total,    icon: TrendingUp, accent: '#2563EB' },
-    { label: 'Đang chờ duyệt', value: pending,  icon: Clock,      accent: '#D97706' },
-    { label: 'Đã phê duyệt',  value: approved, icon: CheckCircle, accent: '#059669' },
-    { label: 'Đã từ chối',    value: rejected, icon: XCircle,     accent: '#DC2626' },
-    { label: 'Mua sắm (PR)',  value: prCount,  icon: FileText,    accent: '#7C3AED' },
+    { label: 'Tổng yêu cầu',  value: total,     icon: TrendingUp,  accent: '#2563EB' },
+    { label: 'Đang chờ duyệt', value: pending,   icon: Clock,       accent: '#D97706' },
+    { label: 'Đã phê duyệt',  value: approved,  icon: CheckCircle, accent: '#059669' },
+    { label: 'Đã từ chối',    value: rejected,  icon: XCircle,     accent: '#DC2626' },
+    { label: 'Đã hủy',        value: cancelled, icon: FileText,    accent: '#6B7280' },
   ];
 
   return (
@@ -92,8 +98,8 @@ export default function Dashboard({ requests, filter, search, onSelectRequest }:
           </div>
         ) : (
           filtered.map((req) => {
-            const sCfg = STATUS_CFG[req.status];
-            const tCfg = TYPE_CFG[req.type];
+            const sCfg = STATUS_CFG[req.status] ?? STATUS_CFG.PENDING;
+            const tCfg = TYPE_CFG[req.type] ?? { label: req.type, color: '#374151', bg: '#F3F4F6' };
             return (
               <div
                 key={req.id}
